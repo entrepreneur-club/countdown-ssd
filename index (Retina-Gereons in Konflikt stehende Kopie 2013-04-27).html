@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Startup Speed Dating</title>
+		<style type="text/css">
+			@import "bootstrap/css/bootstrap.css";
+			@import "bootstrap/css/bootstrap-responsive.css";
+			@import "style.css";
+			#defaultCountdown { width: 240px; height: 45px; }
+		</style>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		
+		<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js" type="text/javascript"></script>
+
+        <script type="text/javascript" src="jcountdown-ui/script/jquery.jcountdown-ui.js"></script>
+
+        <script type="text/javascript" src="bootstrap/js/bootstrap.min.js"></script>
+		
+        <script type="text/javascript">
+
+			var round = 1;
+
+            var fadeToStarted1 = 1
+            var fadeToStarted2 = 1
+
+			function setClock() {
+
+                fadeToStarted1 = 0;
+                fadeToStarted2 = 0;
+
+			    $("#time").countdownui({
+			        date: new Date((new Date()).getTime() + 1000*65), // PUT HERE THE TIME IN SECONDS
+			        onComplete: function( event ) {
+			            nextRound();
+			        },
+			        direction: 'down',
+                    fx: 'basic',
+                    yearsAndMonths: false,
+                    onChange: function(event, settings) {
+
+                        if(fadeToStarted1 == 0 && settings.minsLeft == 0 && settings.secLeft < 60) {
+                            fadeToStarted1 = 1;
+                            $("body").animate({ 'background-color': '#ffffa5' }, (settings.secLeft-31) * 1000);
+                        }
+
+                        if(fadeToStarted2 == 0 && settings.minsLeft == 0 && settings.secLeft < 30) {
+                            fadeToStarted2 = 1;
+                            $("body").animate({ 'background-color': '#f00' }, settings.secLeft * 1000);
+                        }
+                    }
+			    });
+			}
+
+			function prevRound() {
+			    round = round - 1;
+			    resetRound();
+			}
+
+			function nextRound() {
+			    round = round + 1;
+			    resetRound();
+			}
+
+			function resetRound() {
+			    $('#round').html(round);
+			    $("#time").countdownui("destroy");
+                $("body").animate({ 'background-color': '#fff' }, 1000);
+			    setClock();
+			}
+
+			$(function () {
+
+				setClock();
+				
+				$('#pause').toggle(function() { 
+				        $(this).html('<i class="icon-play"></i>'); 
+				        $('#time').countdownui('pause'); 
+				    }, 
+				    function() { 
+				        $(this).html('<i class="icon-pause"></i>'); 
+				        $('#time').countdownui('resume'); 
+				    } 
+				);
+
+				$('#next').click(function() { nextRound(); } );
+				$('#prev').click(function() { prevRound(); } );
+
+			
+
+				$(document).keydown(function(e){
+				    if (e.keyCode == 37 || e.keyCode == 40) { 
+				       prevRound();
+				       return false;
+				    }
+
+				    if(e.keyCode == 39 || e.keyCode == 38) { 
+				    	nextRound();
+				    	return false;
+				    }
+				});
+
+
+				var i = null;
+				$(".container").mousemove(function() {
+				    clearTimeout(i);
+				    $(".countdown-controls").fadeIn();
+				    i = setTimeout(function() {$(".countdown-controls").fadeOut();}, 5000);
+				});
+
+			});
+		</script>
+	</head>
+<body>
+    <div class="container">
+      <div class="masthead" style="overflow:hidden;">
+        <img src="ec.png" class="pull-right" width="210">
+        <img src="startuppers.png" class="pull-right" width="190" style="margin-top:13px;">
+        <h3>Startup Speed Dating</h3>
+      </div>
+      <hr>
+
+      <!-- Example row of columns -->
+      <div class="row-fluid">
+        <div class="span4 offset4 rounds">
+          <h1>Round <span id="round">1</span></h1>
+        </div>
+      </div>
+
+      <div class="row-fluid">
+        <div class="span4 offset4 countdown">
+          <div id="time"></div>
+        </div>
+      </div>
+
+      <div class="row-fluid">
+      	<div class="controls">
+	        <div class="span4 offset4 countdown-controls hide">
+	          <button id="prev" class="btn btn-mini" title="Previous">
+                <i class="icon-chevron-left"></i></button>
+
+	          <button id="pause" class="btn btn-mini" title="Pause">
+                <i class="icon-pause"></i></button>
+	          <button id="next" class="btn btn-mini" title="Next"><i class="icon-chevron-right"></i></button>
+	        </div>
+	    </div>
+      </div>
+
+
+      <hr>
+
+      <div class="row-fluid">
+        <small>SPONSORS</small>
+      </div>
+
+      <div class="row-fluid">
+
+        <div class="span4">
+          <br>
+          <br>
+          <img src="marc-brandis.png" />
+        </div>
+
+        <div class="span4">
+          <img src="google.png" />
+          
+        </div>
+
+        <div class="span4">
+          <br>
+          <img src="standortfoerderung.png" />
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="footer muted">
+        <p>&copy; Entrepreneur Club 2013</p>
+      </div>
+
+    </div> <!-- /container -->
+
+  </body>
+</html>
